@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- This declares that the UI definition requires GTK 4.0.
+       Without this, the builder would not know which library version to use. -->
+  <requires lib="gtk" version="4.0"/>
+
+  <!-- This declares that the UI also requires libadwaita 1.0,
+       which provides modern GNOME widgets (like AdwApplicationWindow). -->
+  <requires lib="Adw" version="1.0"/>
+
+  <!-- Define a template subclass:
+       - class="TextViewerWindow" means we are defining a new subclass called TextViewerWindow
+       - parent="AdwApplicationWindow" means this subclass is based on AdwApplicationWindow
+       This is why it's called a "template" — it's a blueprint for that new subclass. -->
+  <template class="TextViewerWindow" parent="AdwApplicationWindow">
+    <!-- This is the window’s title, shown in the header bar or system UI. -->
+    <property name="title" translatable="yes">Text Viewer</property>
+    <!-- Default window dimensions when first opened. -->
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <style>
+      <class name="devel"/>
+    </style>
+
+    <!-- The main content of the window is wrapped in AdwToolbarView,
+         which makes it easy to combine header bars with content. -->
+    <property name="content">
+      <object class="AdwToolbarView">
+
+        <!-- Define the top bar (a header bar at the top of the window). -->
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <!-- Add a menu button on the right side ("end") of the header bar. -->
+            <child type="end">
+              <object class="GtkMenuButton">
+                <!-- Mark as the primary menu button of the window. -->
+                <property name="primary">True</property>
+                <!-- Use a symbolic “hamburger menu” icon. -->
+                <property name="icon-name">open-menu-symbolic</property>
+                <!-- Tooltip for accessibility and clarity. -->
+                <property name="tooltip-text" translatable="yes">Main Menu</property>
+                <!-- Link this button to the <menu> defined later with id="primary_menu". -->
+                <property name="menu-model">primary_menu</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- The central content of the window is just a label for now. -->
+        <property name="content">
+          <object class="GtkScrolledWindow">
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="child">
+              <object class="GtkTextView" id="main_text_view">
+                <property name="monospace">true</property>
+              </object>
+            </property>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+
+  <!-- Define the application’s primary menu.
+       This is the menu opened by the GtkMenuButton above (menu-model="primary_menu"). -->
+  <menu id="primary_menu">
+    <section>
+      <!-- First menu item: opens the Preferences dialog via app.preferences action. -->
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+
+      <!-- Second menu item: shows keyboard shortcuts (GNOME convention).
+           "win.show-help-overlay" is a standard action built into GTK windows. -->
+      <item>
+        <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>
+
+      <!-- Third menu item: opens an "About" dialog for the app. -->
+      <item>
+        <attribute name="label" translatable="yes">_About Text-viewer</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
+
