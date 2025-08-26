@@ -97,6 +97,27 @@ open_file_complete (GObject *source_object,
                   error->message);
       return;
     }
+
+  // Ensure that the file is encoded with UTF-8
+  if (!g_utf8_validate (contents, length, NULL))
+    {
+      g_printerr ("Unable to load the contents of “%s”: "
+                  "the file is not encoded with UTF-8\n",
+                  g_file_peek_path (file));
+      return;
+    }
+
+  // Retrieve the GtkTextBuffer instance that stores the
+  // text displayed by the GtkTextView widget
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (self->main_text_view);
+
+  // Set the text using the contents of the file
+  gtk_text_buffer_set_text (buffer, contents, length);
+
+  // Reposition the cursor so it's at the start of the text
+  GtkTextIter start;
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_place_cursor (buffer, &start);
 }
 
 static void
