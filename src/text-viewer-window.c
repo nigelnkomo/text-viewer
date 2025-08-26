@@ -68,6 +68,48 @@ text_viewer_window_init (TextViewerWindow *self)
 }
 
 static void
+open_file_complete (GObject *source_object,
+                    GAsyncResult *result,
+                    TextViewerWindow *self)
+{
+  GFile *file = G_FILE (source_object);
+
+  g_autofree char *contents = NULL;
+  gsize length = 0;
+
+  g_autoptr (GError) error = NULL;
+
+  // Complete the asynchronous operation; this function will either
+  // give you the contents of the file as a byte array, or will
+  // set the error argument
+  g_file_load_contents_finish (file,
+                               result,
+                               &contents,
+                               &length,
+                               NULL,
+                               &error);
+
+  // In case of error, print a warning to the standard error output
+  if (error != NULL)
+    {
+      g_printerr ("Unable to open “%s”: %s\n",
+                  g_file_peek_path (file),
+                  error->message);
+      return;
+    }
+}
+
+static void
+open_file (TextViewerWindow *self,
+           GFile *file)
+{
+  g_file_load_contents_async (file,
+                              NULL,
+                              (GAsyncReadyCallback) open_file_complete,
+                              self);
+}
+
+static void
 on_open_response (GObject *source,
                   GAsyncResult *result,
                   gpointer user_data)
