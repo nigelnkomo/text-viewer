@@ -30,6 +30,14 @@
         <!-- Define the top bar (a header bar at the top of the window). -->
         <child type="top">
           <object class="AdwHeaderBar">
+            <!-- Add a open button on the left side ("start") of the header bar. -->
+            <child type="start">
+              <object class="GtkButton" id="open_button">
+                <property name="label">Open</property>
+                <property name="action-name">win.open</property>
+              </object>
+            </child>
+
             <!-- Add a menu button on the right side ("end") of the header bar. -->
             <child type="end">
               <object class="GtkMenuButton">
