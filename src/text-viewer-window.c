@@ -67,3 +67,33 @@ text_viewer_window_init (TextViewerWindow *self)
                            G_ACTION (open_action));
 }
 
+static void
+on_open_response (GObject *source,
+                  GAsyncResult *result,
+                  gpointer user_data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  TextViewerWindow *self = user_data;
+
+  g_autoptr (GFile) file =
+      gtk_file_dialog_open_finish (dialog, result, NULL);
+
+  // If the user selected a file, open it
+  if (file != NULL)
+    open_file (self, file);
+}
+
+static void
+text_viewer_window__open_file_dialog (GAction *action G_GNUC_UNUSED,
+                                      GVariant *parameter G_GNUC_UNUSED,
+                                      TextViewerWindow *self)
+{
+  g_autoptr (GtkFileDialog) dialog = gtk_file_dialog_new ();
+
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (self),
+                        NULL,
+                        on_open_response,
+                        self);
+}
+
