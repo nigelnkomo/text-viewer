@@ -29,6 +29,7 @@ struct _TextViewerWindow
   /* Template widgets */
   GtkTextView *main_text_view;
   GtkButton *open_button;
+  GtkLabel *cursor_pos;
 };
 
 G_DEFINE_FINAL_TYPE (TextViewerWindow, text_viewer_window, ADW_TYPE_APPLICATION_WINDOW)
@@ -38,13 +39,17 @@ text_viewer_window_class_init (TextViewerWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/com/example/TextViewer/text-viewer-window.ui");
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/com/example/TextViewer/text-viewer-window.ui");
   gtk_widget_class_bind_template_child (widget_class,
                                         TextViewerWindow,
                                         main_text_view);
   gtk_widget_class_bind_template_child (widget_class,
                                         TextViewerWindow,
                                         open_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        TextViewerWindow,
+                                        cursor_pos);
 }
 
 static void
