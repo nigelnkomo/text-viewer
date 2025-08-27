@@ -51,6 +51,17 @@
                 <property name="menu-model">primary_menu</property>
               </object>
             </child>
+
+            <!-- Add a cursor position on the right side ("end") of the header bar. -->
+            <child type="end">
+              <object class="GtkLabel" id="cursor_pos">
+                <property name="label">Ln 0, Col 0</property>
+                <style>
+                  <class name="dim-label"/>
+                  <class name="numeric"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
 
