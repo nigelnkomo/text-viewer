@@ -11,5 +11,12 @@ Below is a screenshot showing the result after adding the view:
 
 Below are screenshots showing the result after creating a lorem text file and loading it to the text viewer:
 
-![Screenshot of the content view](images/create-lorem-file.png)
-![Screenshot of the content view](images/load-lorem-file-contents.png)
+![Screenshot of the loaded content](images/create-lorem-file.png)
+![Screenshot of the loaded content](images/load-lorem-file-contents.png)
+
+## Successfully added cursor position functionality
+
+The header now shows the cursor position on the right side.  
+Below is a screenshot showing the result after adding this functionality:
+
+![Screenshot of the cursor position functionality](images/show-cursor-position.png)
