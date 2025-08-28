@@ -90,6 +90,13 @@ text_viewer_window_init (TextViewerWindow *self)
                     "notify::cursor-position",
                     G_CALLBACK (text_viewer_window__update_cursor_position),
                     self);
+
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self),
+                                         "win.save-as",
+                                         (const char *[]){
+                                             "<Ctrl><Shift>s",
+                                             NULL,
+                                         });
 }
 
 static void
