@@ -91,7 +91,10 @@ text_viewer_window_init (TextViewerWindow *self)
                     G_CALLBACK (text_viewer_window__update_cursor_position),
                     self);
 
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self),
+  GtkApplication *app =
+      GTK_APPLICATION (g_application_get_default ());
+
+  gtk_application_set_accels_for_action (app,
                                          "win.save-as",
                                          (const char *[]){
                                              "<Ctrl><Shift>s",
