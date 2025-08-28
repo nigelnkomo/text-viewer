@@ -229,3 +229,33 @@ text_viewer_window__update_cursor_position (GtkTextBuffer *buffer,
   gtk_label_set_text (self->cursor_pos, cursor_str);
 }
 
+static void
+on_save_response (GObject *source,
+                  GAsyncResult *result,
+                  gpointer user_data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  TextViewerWindow *self = user_data;
+
+  g_autoptr (GFile) file =
+      gtk_file_dialog_save_finish (dialog, result, NULL);
+
+  if (file != NULL)
+    save_file (self, file);
+}
+
+static void
+text_viewer_window__save_file_dialog (GAction *action G_GNUC_UNUSED,
+                                      GVariant *param G_GNUC_UNUSED,
+                                      TextViewerWindow *self)
+{
+  g_autoptr (GtkFileDialog) dialog =
+      gtk_file_dialog_new ();
+
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (self),
+                        NULL,
+                        on_save_response,
+                        self);
+}
+
