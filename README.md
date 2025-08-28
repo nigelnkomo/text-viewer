@@ -20,3 +20,11 @@ The header now shows the cursor position on the right side.
 Below is a screenshot showing the result after adding this functionality:
 
 ![Screenshot of the cursor position functionality](images/show-cursor-position.png)
+
+## Successfully added Save As functionality
+
+Below is a demo GIF showing the result after adding Save As:
+
+![Save As demo](images/save-as.gif)
+
+
