@@ -230,6 +230,76 @@ text_viewer_window__update_cursor_position (GtkTextBuffer *buffer,
 }
 
 static void
+save_file_complete (GObject *source_object,
+                    GAsyncResult *result,
+                    gpointer user_data)
+{
+  GFile *file = G_FILE (source_object);
+
+  g_autoptr (GError) error = NULL;
+  g_file_replace_contents_finish (file, result, NULL, &error);
+
+  // Query the display name for the file
+  g_autofree char *display_name = NULL;
+  g_autoptr (GFileInfo) info =
+      g_file_query_info (file,
+                         "standard::display-name",
+                         G_FILE_QUERY_INFO_NONE,
+                         NULL,
+                         NULL);
+  if (info != NULL)
+    {
+      display_name =
+          g_strdup (g_file_info_get_attribute_string (info, "standard::display-name"));
+    }
+  else
+    {
+      display_name = g_file_get_basename (file);
+    }
+
+  if (error != NULL)
+    {
+      g_printerr ("Unable to save “%s”: %s\n",
+                  display_name,
+                  error->message);
+    }
+}
+
+static void
+save_file (TextViewerWindow *self,
+           GFile *file)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (self->main_text_view);
+
+  // Retrieve the iterator at the start of the buffer
+  GtkTextIter start;
+  gtk_text_buffer_get_start_iter (buffer, &start);
+
+  // Retrieve the iterator at the end of the buffer
+  GtkTextIter end;
+  gtk_text_buffer_get_end_iter (buffer, &end);
+
+  // Retrieve all the visible text between the two bounds
+  char *text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+  // If there is nothing to save, return early
+  if (text == NULL)
+    return;
+
+  g_autoptr (GBytes) bytes = g_bytes_new_take (text, strlen (text));
+
+  // Start the asynchronous operation to save the data into the file
+  g_file_replace_contents_bytes_async (file,
+                                       bytes,
+                                       NULL,
+                                       FALSE,
+                                       G_FILE_CREATE_NONE,
+                                       NULL,
+                                       save_file_complete,
+                                       self);
+}
+
+static void
 on_save_response (GObject *source,
                   GAsyncResult *result,
                   gpointer user_data)
