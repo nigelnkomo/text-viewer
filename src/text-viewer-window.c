@@ -63,6 +63,11 @@ text_viewer_window__update_cursor_position (GtkTextBuffer *buffer,
                                             TextViewerWindow *self);
 
 static void
+text_viewer_window__save_file_dialog (GAction *action,
+                                      GVariant *param,
+                                      TextViewerWindow *self);
+
+static void
 text_viewer_window_init (TextViewerWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -75,6 +80,10 @@ text_viewer_window_init (TextViewerWindow *self)
                     self);
   g_action_map_add_action (G_ACTION_MAP (self),
                            G_ACTION (open_action));
+
+  g_autoptr (GSimpleAction) save_action = g_simple_action_new ("save-as", NULL);
+  g_signal_connect (save_action, "activate", G_CALLBACK (text_viewer_window__save_file_dialog), self);
+  g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (save_action));
 
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (self->main_text_view);
   g_signal_connect (buffer,
