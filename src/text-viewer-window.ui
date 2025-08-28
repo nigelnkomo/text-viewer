@@ -89,10 +89,10 @@
        This is the menu opened by the GtkMenuButton above (menu-model="primary_menu"). -->
   <menu id="primary_menu">
     <section>
-      <!-- First menu item: opens the Preferences dialog via app.preferences action. -->
+      <!-- First menu item -->
       <item>
-        <attribute name="label" translatable="yes">_Preferences</attribute>
-        <attribute name="action">app.preferences</attribute>
+        <attribute name="label" translatable="yes">_Save as...</attribute>
+        <attribute name="action">win.save-as</attribute>
       </item>
 
       <!-- Second menu item: shows keyboard shortcuts (GNOME convention).
