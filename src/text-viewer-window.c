@@ -118,6 +118,16 @@ text_viewer_window_init (TextViewerWindow *self)
                                          });
 
   self->settings = g_settings_new ("com.example.TextViewer");
+
+  g_settings_bind (self->settings, "window-width",
+                   G_OBJECT (self), "default-width",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (self->settings, "window-height",
+                   G_OBJECT (self), "default-height",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (self->settings, "window-maximized",
+                   G_OBJECT (self), "maximized",
+                   G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
