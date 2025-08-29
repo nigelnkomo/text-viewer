@@ -26,6 +26,8 @@ struct _TextViewerWindow
 {
   AdwApplicationWindow parent_instance;
 
+  GSettings *settings;
+
   /* Template widgets */
   GtkTextView *main_text_view;
   GtkButton *open_button;
@@ -35,9 +37,23 @@ struct _TextViewerWindow
 G_DEFINE_FINAL_TYPE (TextViewerWindow, text_viewer_window, ADW_TYPE_APPLICATION_WINDOW)
 
 static void
+text_viewer_window_finalize (GObject *gobject)
+{
+  TextViewerWindow *self = TEXT_VIEWER_WINDOW (gobject);
+
+  g_clear_object (&self->settings);
+
+  G_OBJECT_CLASS (text_viewer_window_parent_class)->finalize (gobject);
+}
+
+static void
 text_viewer_window_class_init (TextViewerWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = text_viewer_window_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/com/example/TextViewer/text-viewer-window.ui");
@@ -100,6 +116,8 @@ text_viewer_window_init (TextViewerWindow *self)
                                              "<Ctrl><Shift>s",
                                              NULL,
                                          });
+
+  self->settings = g_settings_new ("com.example.TextViewer");
 }
 
 static void
